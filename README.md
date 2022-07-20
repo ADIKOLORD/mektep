@@ -1,2 +1,2 @@
-# mektep
+# SCHOOL
 THIS IS MY OWN PROJECT
