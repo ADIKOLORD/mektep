@@ -6,4 +6,5 @@ BASE_URL = 'api/v1/'
 urlpatterns = [
     path(ADMIN_URL, admin.site.urls),
     path(BASE_URL + 'account/', include('account.urls')),
+    path(BASE_URL + 'subject/', include('subject.urls')),
 ]

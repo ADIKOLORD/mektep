@@ -5,6 +5,7 @@ from account import models, serializers, utils
 from account.permissions import IsUserDirector, \
     IsAuthorOrTeacher, IsTeacherOrReadOnly, IsTeacherAuthor, \
         IsTeacherAuthorOfGradeOrReadOnly as ITAOGORO
+from subject.models import Diary
 
 RUDAPIView = generics.RetrieveUpdateDestroyAPIView
 
@@ -106,12 +107,14 @@ class StudentListCreateAPIView(generics.ListCreateAPIView):
             pk = request.user.teacher.school.pk
             request.data['school'] = pk
             request.data['user'] = user.pk
+            request.data['gender'] = str(request.data['gender']).upper()
             full_name = f"{request.data['surname']} {request.data['name']}"
             get_post = super().post(request, *args, **kwargs)
             utils.send_password_to_email(
                 gen_user,
                 full_name,
                 request.data['email'])
+            Diary.objects.get_or_create(student=user.student)
             return get_post
         
         except:
@@ -184,15 +187,43 @@ class SubjectListCreateAPIView(generics.ListCreateAPIView):
         serializer = serializers.SubjectSerializer(subjects, many=1)
         return response.Response(serializer.data, status=200)
 
-    def post(self, request, *args, **kwargs):
-        request.data['school'] = request.user.teacher.school.id
-        return super().post(request, *args, **kwargs)
         
 
 class SubjectRetrieveUpdateDestroyAPIView(RUDAPIView):
     queryset = models.Subject.objects.all()
     serializer_class = serializers.SubjectSerializer
+    permission_classes = [
+        permissions.IsAuthenticated, 
+        IsTeacherOrReadOnly]
+
+
+#-----------------------------SubWithTeach------------------------------+#
+
+
+class SubWithTeachListCreateAPIView(generics.ListCreateAPIView):
+    queryset = models.SubWithTeach.objects.all()
+    serializer_class = serializers.SubWithTeachSerializer
     permission_classes = [permissions.IsAuthenticated, IsTeacherOrReadOnly]
+
+    def list(self, request, *args, **kwargs):
+        try:
+            teacher = request.user.teacher
+            subjects = self.get_queryset().filter(teacher=teacher)
+        except:
+            subjects = request.user.student.grade.subjects.all()
+
+        serializer = serializers.SubjectSerializer(subjects, many=1)
+        return response.Response(serializer.data, status=200)
+
+        
+
+class SubWithTeachRetrieveUpdateDestroyAPIView(RUDAPIView):
+    queryset = models.SubWithTeach.objects.all()
+    serializer_class = serializers.SubWithTeachSerializer
+    permission_classes = [
+        permissions.IsAuthenticated, 
+        IsTeacherOrReadOnly]
+
 
 
 #-----------------------------User------------------------------#

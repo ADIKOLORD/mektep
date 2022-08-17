@@ -1,0 +1,131 @@
+"+" Автоматически
+"**" Необязательно
+-------------------Account-------------------
+0) School
+
+title
+description
+region
+city
+village**
+quantity_students+
+quantity_teachers+
+create_date
+
+
+1) Teacher
+
+user -> User
+school -> School
+fullname
+gender
+email
+position
+image**
+create_date+
+
+
+2) Student
+
+user -> User
+school -> School
+name
+surname
+patronymic
+gender
+email
+grade -> Grade
+position**
+is_minister+**
+phone_number
+fullname_father**
+phone_number_f**
+fullname_mother**
+phone_number_m**
+create_date+
+
+
+3) Grade
+
+school -> School
+classroom_teacher -> Teacher
+which_class
+progress+
+subjects -> SubWithTeach
+create_date+
+
+
+4) Subject
+
+school -> School
+title
+create_date+
+
+
+5) SubWithTeach
+
+subject -> Subject
+teacher -> Teacher
+
+
+-------------------Subject-------------------
+
+
+0) Diary
+
+student -> Student
+create_date+
+
+
+1) Mark
+
+student -> Student
+diary -> Diary
+subwithteach -> SubWithTeach
+mark**
+why**
+set_day+
+
+
+2) Quarter
+
+student -> Student
+diary -> Diary
+subwithteach -> SubWithTeach
+which_quarter
+mark
+set_day+
+
+
+3) TimeTable
+
+school -> School
+grade -> Grade
+weekday
+subwithteach -> SubWithTeach
+start_lesson
+finish_lesson
+
+
+4) Course
+
+school -> School
+teacher -> Teacher
+start_course
+finish_course
+title
+description
+price**
+weekdays
+students -> Student
+create_date+
+
+
+5) Attendance
+
+student -> Student
+arrived
+cause**
+date+
+
+

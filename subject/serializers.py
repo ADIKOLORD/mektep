@@ -28,6 +28,16 @@ class TimeTableSerializer(SM):
         fields = '__all__'
 
 
+class CourseSerializer(SM):
+    class Meta:
+        model = models.Course
+        fields = '__all__'
+
+
+class AttendanceSerializer(SM):
+    class Meta:
+        model = models.Attendance
+        fields = '__all__'
 
 
 

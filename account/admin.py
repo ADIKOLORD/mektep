@@ -49,11 +49,12 @@ class GradeAdmin(admin.ModelAdmin):
     list_display = ['school', 'which_class', 'progress']
     list_display_links = list_display
     list_filter = ['school', 'create_date']
+    readonly_fields = ['subjects']
 
 
 @admin.register(models.Subject)
 class SubjectAdmin(admin.ModelAdmin):
-    list_display = ['school', 'teacher', 'title', 'create_date']
+    list_display = ['school', 'title', 'create_date']
     list_display_links = list_display[:-1]
     list_filter = ['school', 'title', ]
     save_on_top = True

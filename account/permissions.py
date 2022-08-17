@@ -1,19 +1,6 @@
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
 
-# class IsUserTeacher(BasePermission):
-#     """
-#     Проверяет учитель ли User
-#     """
-#     def has_permission(self, request, view):
-#         if request.method in SAFE_METHODS:
-#             return True
-#         try:
-#             return bool(request.user.teacher)
-#         except:
-#             return False
-
-
 class IsUserDirector(BasePermission):
     """
     Проверяет Директор ли User
@@ -54,11 +41,26 @@ class IsAuthorOrTeacher(BasePermission):
             return request.method == "PUT"
         try:
             return bool(request.user.teacher.grade == obj.user.student.grade)
+        
         except:
             return False
 
 
 class IsTeacherOrReadOnly(BasePermission):
+    """
+    Проверяет если учитель то можно создать
+    """
+    
+    def has_permission(self, request, view):
+        if request.method in SAFE_METHODS:
+            return True
+        try:
+            return bool(request.user.teacher)
+        except:
+            return False
+
+
+class IsTeacherDetailOrReadOnly(BasePermission):
     """
     Проверяет если учитель то можно создать
     """
@@ -76,14 +78,6 @@ class IsTeacherOrReadOnly(BasePermission):
             except:
                 return False
         return False
-
-    def has_permission(self, request, view):
-        if request.method in SAFE_METHODS:
-            return True
-        try:
-            return bool(request.user.teacher)
-        except:
-            return False
 
 
 class IsTeacherAuthor(BasePermission):

@@ -50,6 +50,15 @@ class SubjectSerializer(SM):
         fields = '__all__'
 
 
+#-----------------------SubWithTeach-----------------------#
+
+
+class SubWithTeachSerializer(SM):
+    class Meta:
+        model = models.SubWithTeach
+        fields = '__all__'
+
+
 #-----------------------User-----------------------#
 
 

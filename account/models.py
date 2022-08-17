@@ -232,7 +232,7 @@ class Student(models.Model):
 
 class Grade(models.Model):
     school = models.ForeignKey(
-        School,
+        School
         on_delete=models.CASCADE,
         related_name='grades',
         verbose_name='Школа',
@@ -258,7 +258,7 @@ class Grade(models.Model):
     )
 
     subjects = models.ManyToManyField(
-        'Subject',
+        'SubWithTeach',
         related_name='use_grades',
         verbose_name='Предметы',
     )
@@ -307,4 +307,24 @@ class Subject(models.Model):
         verbose_name_plural = 'Предметы'
         unique_together = ['school', 'title']
 
+
+class SubWithTeach(models.Model):
+    subject = models.ForeignKey(
+        Subject,
+        on_delete=models.SET_NULL,
+        related_name='use_teachers',
+        verbose_name='Предмет',
+        null=1,
+    )
+
+    teacher = models.ForeignKey(
+        Teacher,
+        on_delete=models.SET_NULL,
+        related_name='my_subjects',
+        verbose_name='Учитель',
+        null=1,
+    )
+
+    def __str__(self) -> str:
+        return f"{self.teacher} - {self.subject}"
     
